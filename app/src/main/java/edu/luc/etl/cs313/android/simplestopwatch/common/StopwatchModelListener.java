@@ -25,5 +25,5 @@ public interface StopwatchModelListener {
     /**
      * Listener method for playing an alarm sound.
      */
-    void soundAlarm();
+    void soundAlarm(final int notification_sound);
 }

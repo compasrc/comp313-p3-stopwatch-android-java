@@ -1,5 +1,7 @@
 package edu.luc.etl.cs313.android.simplestopwatch.common;
 
+import android.media.RingtoneManager;
+
 /**
  * Constants for the time calculations used by the stopwatch.
  */
@@ -31,4 +33,9 @@ public enum Constants {
      * Constant defined as the time to wait before starting the stopwatch.
      */
     public static final int TICK_WAIT = 3;
+
+    /**
+     * Constant defined as the default sound to use for the alarm.
+     * */
+    public static final int DEFAULT_ALARM = RingtoneManager.TYPE_NOTIFICATION;
 }

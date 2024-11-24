@@ -3,7 +3,6 @@ package edu.luc.etl.cs313.android.simplestopwatch.android;
 import android.app.Activity;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -103,10 +102,12 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
 
     /**
      * Prepares media player to play the alarm sound.
+     * To change the alarm being played, change RingtoneManager.
      *
+     * @param notification_sound The sound to use for the notification (from RingtoneManager).
      */
-    public void soundAlarm() {
-        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    public void soundAlarm(final int notification_sound) {
+        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(notification_sound);
         final MediaPlayer player = new MediaPlayer();
         final Context context = getApplicationContext();
 
