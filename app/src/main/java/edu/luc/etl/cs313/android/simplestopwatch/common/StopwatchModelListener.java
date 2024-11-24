@@ -8,6 +8,22 @@ package edu.luc.etl.cs313.android.simplestopwatch.common;
  * @author laufer
  */
 public interface StopwatchModelListener {
+    /**
+     * Listener method for detecting changes in timeValue.
+     *
+     * @param timeValue The time value the listener listens for.
+     */
     void onTimeUpdate(int timeValue);
+
+    /**
+     * Listener method for detecting changes in state.
+     *
+     * @param stateId The state the listener listens for.
+     * */
     void onStateUpdate(int stateId);
+
+    /**
+     * Listener method for playing an alarm sound.
+     */
+    void soundAlarm();
 }

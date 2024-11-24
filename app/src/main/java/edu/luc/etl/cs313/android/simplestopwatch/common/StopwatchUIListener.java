@@ -6,6 +6,8 @@ package edu.luc.etl.cs313.android.simplestopwatch.common;
  * @author laufer
  */
 public interface StopwatchUIListener {
-    void onStartStop();
-    void onLapReset();
+    /**
+     * Method for listener that is called whenever the button in the UI is pressed.
+     **/
+    void onButton();
 }
