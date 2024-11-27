@@ -24,16 +24,25 @@ class RunningState implements StopwatchState {
     private final StopwatchSMStateView sm;
 
     /**
-     * Describes the behavior of RunningState
-     * */
+     * Implementation of onButton() from the StopwatchUIListener interface for RunningState.
+     * When the button is pressed:
+     * 1. Stop the running the timer.
+     * 2. Sound the alarm.
+     * 3. Reset stopwatch to initial state (Stopped).
+     */
     @Override
     public void onButton() {
         sm.actionStop();
-        sm.actionInit();
         sm.actionAlarm();
-        sm.toStoppedState();
+        sm.actionInit();
     }
 
+    /**
+     * Implementation of onTick() from the StopwatchUIListener interface for RunningState.
+     * When the button is pressed:
+     * 1. IF the timer hits 0, go to Alarming state.
+     * 2. ELSE decrement the timer and go to the Running state.
+     */
     @Override
     public void onTick() {
         if (sm.getRuntime() == 0) {

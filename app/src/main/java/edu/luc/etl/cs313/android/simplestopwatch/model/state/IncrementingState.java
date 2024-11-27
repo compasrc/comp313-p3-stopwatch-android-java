@@ -14,7 +14,7 @@ class IncrementingState implements StopwatchState {
      *
      * @param sm The state machine view to pass to the state.
      */
-    public IncrementingState(final StopwatchSMStateView sm) {this.sm = sm;}
+    public IncrementingState(final StopwatchSMStateView sm) { this.sm = sm; }
 
     private int ticker = Constants.TICK_WAIT;
 
@@ -25,7 +25,10 @@ class IncrementingState implements StopwatchState {
 
     /**
      * Implementation of onButton() from the Listener interface for IncrementingState.
-     * When the button is pressed, either more time is added or
+     * When the button is pressed:
+     * 1. Increment the timer.
+     * 2. IF 99 seconds is reached, sound the alarm and switch to Running state.
+     * 3. ELSE reset the ticker to it's initial value of 3 seconds and switch to Incrementing state.
      */
     @Override
     public void onButton() {
@@ -41,6 +44,9 @@ class IncrementingState implements StopwatchState {
 
     /**
      * Implementation of onTick() from the Listener interface for IncrementingState.
+     * 1. On each tick, decrement the ticker value by one.
+     * 2. IF ticker value reaches 0, sound the alarm and switch to Running state.
+     * 3. ELSE switch to Incrementing state.
      */
     @Override
     public void onTick() {
