@@ -43,11 +43,17 @@ class StoppedState implements StopwatchState {
         throw new UnsupportedOperationException("onTick");
     }
 
+    /**
+     * Updates the runtime to the UI.
+     * */
     @Override
     public void updateView() {
         sm.updateUIRuntime();
     }
 
+    /**
+     * Returns this state.
+     * */
     @Override
     public int getId() {
         return R.string.STOPPED;

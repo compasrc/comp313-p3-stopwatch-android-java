@@ -12,13 +12,25 @@ import edu.luc.etl.cs313.android.simplestopwatch.model.time.TimeModel;
  */
 public class DefaultStopwatchStateMachine implements StopwatchStateMachine {
 
+    /**
+     * Constructor method for the state machine. Requires the passive time model and active clock model.
+     *
+     * @param timeModel The passive time model.
+     * @param clockModel The active clock model.
+     * */
     public DefaultStopwatchStateMachine(final TimeModel timeModel, final ClockModel clockModel) {
         this.timeModel = timeModel;
         this.clockModel = clockModel;
     }
 
+    /**
+     * The passive model for time to be used by the state machine.
+     * */
     private final TimeModel timeModel;
 
+    /**
+     * The active model for the clock to be used by the state machine.
+     * */
     private final ClockModel clockModel;
 
     /**
@@ -26,13 +38,26 @@ public class DefaultStopwatchStateMachine implements StopwatchStateMachine {
      */
     private StopwatchState state;
 
+    /**
+     * Sets the current state of the state machine.
+     *
+     * @param state The state to set for the state machine.
+     * */
     protected void setState(final StopwatchState state) {
         this.state = state;
         listener.onStateUpdate(state.getId());
     }
 
+    /**
+     * The listener which updates the state machine of changes to the UI.
+     * */
     private StopwatchModelListener listener;
 
+    /**
+     * Sets the listener which updates the state machine of changes to the UI.
+     *
+     * @param listener The listener to set for the state machine.
+     * */
     @Override
     public void setModelListener(final StopwatchModelListener listener) {
         this.listener = listener;
@@ -41,12 +66,26 @@ public class DefaultStopwatchStateMachine implements StopwatchStateMachine {
     // forward event uiUpdateListener methods to the current state
     // these must be synchronized because events can come from the
     // UI thread or the timer thread
+
+    /***
+     * The method which is forwarded to the current state to describe the behavior when the button in the UI is pressed.
+     */
     @Override public synchronized void onButton() { state.onButton(); }
+
+    /**
+     * The method which is forwarded to the current state to describe the behavior when a tick passes.
+     * */
     @Override public synchronized void onTick()      { state.onTick(); }
 
+    /**
+     * Updates the UI with the runtime from the time model.
+     * */
     @Override public void updateUIRuntime() { listener.onTimeUpdate(timeModel.getRuntime()); }
 
     // model interactions
+    /**
+     * Returns the runtime stored in the time model.
+     * */
     @Override public int getRuntime() { return timeModel.getRuntime();}
 
     // known states

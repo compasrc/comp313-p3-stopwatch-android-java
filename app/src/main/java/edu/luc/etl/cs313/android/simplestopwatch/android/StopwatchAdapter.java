@@ -44,7 +44,9 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
     }
 
     /**
+     * Implementation of the method called when an Activity is started.
      *
+     * @param savedInstanceState The instance containing data from before the Activity was last terminated/ended.
      */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -57,12 +59,18 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
         model.setModelListener(this);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
+    /**
+     *
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -122,7 +130,11 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
         }
     }
 
-    // forward event listener methods to the model
+    /**
+     * Forwards the event listener methods to the model.
+     *
+     * @param view The view of the state machine.
+     */
     public void onButton(final View view) {
         model.onButton();
     }

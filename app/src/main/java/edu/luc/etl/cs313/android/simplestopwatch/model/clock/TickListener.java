@@ -6,5 +6,8 @@ package edu.luc.etl.cs313.android.simplestopwatch.model.clock;
  * @author laufer
  */
 public interface TickListener {
+    /**
+     * Listener method for the behavior that must be implemented when a tick occurs.
+     * */
     void onTick();
 }

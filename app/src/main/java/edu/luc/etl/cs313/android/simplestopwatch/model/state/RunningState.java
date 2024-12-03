@@ -53,11 +53,17 @@ class RunningState implements StopwatchState {
         }
     }
 
+    /**
+     * Updates the runtime to the UI.
+     * */
     @Override
     public void updateView() {
         sm.updateUIRuntime();
     }
 
+    /**
+     * Returns this state.
+     * */
     @Override
     public int getId() {
         return R.string.RUNNING;

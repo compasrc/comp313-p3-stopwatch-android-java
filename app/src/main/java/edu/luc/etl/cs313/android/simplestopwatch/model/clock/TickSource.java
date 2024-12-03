@@ -7,5 +7,10 @@ package edu.luc.etl.cs313.android.simplestopwatch.model.clock;
  * @author laufer
  */
 public interface TickSource {
+    /**
+     * Sets the source for the events that occurs for the stopwatch.
+     *
+     * @param listener The listener for the onTick events in the stopwatch model.
+     * */
     void setTickListener(TickListener listener);
 }

@@ -16,7 +16,7 @@ class AlarmingState implements StopwatchState {
     public AlarmingState(final StopwatchSMStateView sm) { this.sm = sm; }
 
     /**
-     * The view of the state machine that the IncrementingState object has.
+     * The view of the state machine that the StopwatchState object has.
      * */
     private final StopwatchSMStateView sm;
 
