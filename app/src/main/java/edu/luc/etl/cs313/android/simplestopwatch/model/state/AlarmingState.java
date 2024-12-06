@@ -34,7 +34,8 @@ class AlarmingState implements StopwatchState {
 
     /**
      * Implementation of onTick() from the TickListener interface for AlarmingState.
-     * The Stopped state is not to allow ticks, so throw an error if a tick occurs.
+     * 1. Sound the alarm.
+     * 2. Continue in the Alarming State (until the button is pressed).
      */
     @Override
     public void onTick() {

@@ -41,6 +41,29 @@ public abstract class AbstractTimeModelTest {
 //    }
 
     /**
+     * Verifies that initial state runtime is zero.
+     *
+     * Chris & Michael
+     */
+
+    @Test
+    public void testInitialState() {
+        final var state = model.getRuntime();
+        assertEquals(0, state);
+    }
+
+    /**
+     * Verifies that runtime is decremented correctly.
+     */
+
+    @Test
+    public void testDecrementRuntimeOne() {
+        final var rt = model.getRuntime();
+        model.decRuntime();
+        assertEquals((rt - SEC_PER_TICK), model.getRuntime());
+    }
+
+    /**
      * Verifies that runtime is incremented correctly.
      *
      * Emil & Ryan
@@ -50,10 +73,8 @@ public abstract class AbstractTimeModelTest {
     @Test
     public void testIncrementRuntimeOne() {
         final var rt = model.getRuntime();
-        // final var lt = model.getLaptime();
         model.incRuntime();
         assertEquals((rt + SEC_PER_TICK), model.getRuntime());
-        // assertEquals(lt, model.getLaptime());
     }
 
     /**

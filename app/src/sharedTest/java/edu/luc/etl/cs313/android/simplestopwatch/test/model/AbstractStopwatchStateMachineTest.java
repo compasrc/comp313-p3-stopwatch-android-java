@@ -134,9 +134,7 @@ class UnifiedMockDependency implements TimeModel, ClockModel, StopwatchModelList
     }
 
     @Override
-    public void soundAlarm(int notification_sound) {
-
-    }
+    public void soundAlarm(int notification_sound) { }
 
     @Override
     public void setTickListener(TickListener listener) {
@@ -154,9 +152,7 @@ class UnifiedMockDependency implements TimeModel, ClockModel, StopwatchModelList
     }
 
     @Override
-    public void resetRuntime() {
-        runningTime = 0;
-    }
+    public void resetRuntime() { runningTime = 0; }
 
     @Override
     public void incRuntime() {
