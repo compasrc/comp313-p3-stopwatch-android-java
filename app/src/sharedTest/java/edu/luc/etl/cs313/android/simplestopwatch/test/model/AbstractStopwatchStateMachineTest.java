@@ -137,6 +137,31 @@ public abstract class AbstractStopwatchStateMachineTest {
     }
 
     /**
+     * Verifies that when button is pressed during Running,
+     * state machine transitions to Stopped.
+     *
+     * @author Chris & Michael
+     */
+    @Test
+    public void testRunningToStopped() {
+
+        for (int i=0; i<5; i++){
+            model.onButton();
+        }
+        onTickRepeat(3);    //enter Running
+        model.onButton();
+        assertTimeEquals(0);
+        assertEquals(R.string.STOPPED, dependency.getState());
+
+        for (int i=0; i<99; i++){
+            model.onButton();
+        }
+        model.onButton();
+        assertTimeEquals(0);
+        assertEquals(R.string.STOPPED, dependency.getState());
+    }
+
+    /**
      * Verifies the following:
      * 1. The state machine starts in the stopped state.
      * 2. Upon pressing the button, the state machine transitions to the incrementing state and increments runtime by 1.
