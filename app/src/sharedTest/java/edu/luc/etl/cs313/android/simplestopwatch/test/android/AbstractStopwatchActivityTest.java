@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import android.content.pm.ActivityInfo;
+import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import edu.luc.etl.cs313.android.simplestopwatch.R;
 import edu.luc.etl.cs313.android.simplestopwatch.android.StopwatchAdapter;
+import org.robolectric.shadows.ShadowMediaPlayer;
 
 import static edu.luc.etl.cs313.android.simplestopwatch.common.Constants.SEC_PER_MIN;
 
@@ -51,54 +54,97 @@ public abstract class AbstractStopwatchActivityTest {
     public void testActivityScenarioRun() throws Throwable {
         getActivity().runOnUiThread(() -> {
             assertEquals(0, getDisplayedValue());
-            assertTrue(getStartStopButton().performClick());
-        });
-        Thread.sleep(5500); // <-- do not run this in the UI thread!
-        runUiThreadTasks();
-        getActivity().runOnUiThread(() -> {
+            for (int i = 0; i < 5; i++) {
+                assertTrue(getStartStopButton().performClick());
+                runUiThreadTasks();
+            }
             assertEquals(5, getDisplayedValue());
+        });
+        Thread.sleep(3000); // <-- do not run this in the UI thread!
+        runUiThreadTasks();
+        assertEquals(5, getDisplayedValue());
+        Thread.sleep(4000);
+        runUiThreadTasks();
+        Thread.sleep(1000);
+        runUiThreadTasks(); // need to run twice otherwise the code halts when the alarm sounds
+        getActivity().runOnUiThread(() -> {
+            assertEquals(0, getDisplayedValue());
             assertTrue(getStartStopButton().performClick());
         });
     }
 
     /**
-     * Verifies the following scenario: time is 0, press start, wait 5+ seconds,
-     * expect time 5, press lap, wait 4 seconds, expect time 5, press start,
-     * expect time 5, press lap, expect time 9, press lap, expect time 0.
+     * Verifies that when runtime reaches 99 in the incrementing state,
+     * the state machine transitions into the running state,
+     * and then after 3 seconds the runtime is 94.
      *
-     * @throws Throwable
-     */
-//    @Test
-//    public void testActivityScenarioRunLapReset() throws Throwable {
-//        getActivity().runOnUiThread(() -> {
-//            assertEquals(0, getDisplayedValue());
-//            assertTrue(getStartStopButton().performClick());
-//        });
-//        Thread.sleep(5500); // <-- do not run this in the UI thread!
-//        runUiThreadTasks();
-//        getActivity().runOnUiThread(() -> {
-//            assertEquals(5, getDisplayedValue());
-//            assertTrue(getResetLapButton().performClick());
-//        });
-//        Thread.sleep(4000); // <-- do not run this in the UI thread!
-//        runUiThreadTasks();
-//        getActivity().runOnUiThread(() -> {
-//            assertEquals(5, getDisplayedValue());
-//            assertTrue(getStartStopButton().performClick());
-//        });
-//        runUiThreadTasks();
-//        getActivity().runOnUiThread(() -> {
-//            assertEquals(5, getDisplayedValue());
-//            assertTrue(getResetLapButton().performClick());
-//        });
-//        runUiThreadTasks();
-//        getActivity().runOnUiThread(() -> {
-//            assertEquals(9, getDisplayedValue());
-//            assertTrue(getResetLapButton().performClick());
-//        });
-//        runUiThreadTasks();
-//        getActivity().runOnUiThread(() -> assertEquals(0, getDisplayedValue()));
-//    }
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testDecrementStartAt99() throws Throwable {
+        assertEquals(0, getDisplayedValue());
+        for (int i = 0; i < 99; i++) {
+            assertTrue(getStartStopButton().performClick());
+            runUiThreadTasks();
+        }
+        assertEquals(Constants.SEC_MAX, getDisplayedValue());
+        Thread.sleep(5000);
+        runUiThreadTasks();
+        assertEquals(94, getDisplayedValue());
+        assertTrue(getStartStopButton().performClick());
+    }
+
+    /**
+     * Verifies that stopwatch waits 3 seconds before running.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testRuntimeOut() throws Throwable {
+        getActivity().runOnUiThread(() -> {
+           for(int i = 0; i < 3; i++) {
+               assertTrue(getStartStopButton().performClick());
+           }
+           assertEquals(3, getDisplayedValue());
+        });
+        Thread.sleep(3000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(3, getDisplayedValue());
+        });
+        Thread.sleep(1000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(2, getDisplayedValue());
+        });
+    }
+
+    /**
+     * Verifies that decrementing behavior is preserved after screen is rotated from portrait to landscape.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testDecrementAfterRotation() throws Throwable {
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getActivity().runOnUiThread(() -> {
+            for(int i = 0; i < 7; i++) {
+                assertTrue(getStartStopButton().performClick());
+            }
+            assertEquals(7, getDisplayedValue());
+        });
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        Thread.sleep(3000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(7, getDisplayedValue());
+        });
+        Thread.sleep(1000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(6, getDisplayedValue());
+        });
+    }
 
     // auxiliary methods for easy access to UI widgets
 
@@ -110,17 +156,12 @@ public abstract class AbstractStopwatchActivityTest {
 
     protected int getDisplayedValue() {
         final TextView ts = getActivity().findViewById(R.id.seconds);
-        // final TextView tm = getActivity().findViewById(R.id.minutes);
         return tvToInt(ts);
     }
 
     protected Button getStartStopButton() {
         return getActivity().findViewById(R.id.startStop);
     }
-
-//    protected Button getResetLapButton() {
-//        return getActivity().findViewById(R.id.resetLap);
-//    }
 
     /**
      * Explicitly runs tasks scheduled to run on the UI thread in case this is required

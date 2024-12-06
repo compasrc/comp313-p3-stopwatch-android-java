@@ -34,18 +34,16 @@ public abstract class AbstractTimeModelTest {
     /**
      * Verifies that runtime and laptime are initially 0 or less.
      */
-//    @Test
-//    public void testPreconditions() {
-//        assertEquals(0, model.getRuntime());
-//        assertTrue(model.getLaptime() <= 0);
-//    }
+    @Test
+    public void testPreconditions() {
+        assertEquals(0, model.getRuntime());
+    }
 
     /**
      * Verifies that initial state runtime is zero.
      *
-     * Chris & Michael
+     * @author Chris & Michael
      */
-
     @Test
     public void testInitialState() {
         final var state = model.getRuntime();
@@ -54,8 +52,9 @@ public abstract class AbstractTimeModelTest {
 
     /**
      * Verifies that runtime is decremented correctly.
+     *
+     * @author Chris & Michael
      */
-
     @Test
     public void testDecrementRuntimeOne() {
         final var rt = model.getRuntime();
@@ -66,49 +65,12 @@ public abstract class AbstractTimeModelTest {
     /**
      * Verifies that runtime is incremented correctly.
      *
-     * Emil & Ryan
+     * @author Emil & Ryan
      */
-
-
     @Test
     public void testIncrementRuntimeOne() {
         final var rt = model.getRuntime();
         model.incRuntime();
         assertEquals((rt + SEC_PER_TICK), model.getRuntime());
     }
-
-    /**
-     * Verifies that runtime turns over correctly.
-     */
-//    @Test
-//    public void testIncrementRuntimeMany() {
-//        final int rt = model.getRuntime();
-//        final int lt = model.getLaptime();
-//        for (int i = 0; i < SEC_PER_HOUR; i ++) {
-//            model.incRuntime();
-//        }
-//        assertEquals(rt, model.getRuntime());
-//        assertEquals(lt, model.getLaptime());
-//    }
-
-    /**
-     * Verifies that laptime works correctly.
-     */
-//    @Test
-//    public void testLaptime() {
-//        final var rt = model.getRuntime();
-//        final var lt = model.getLaptime();
-//        for (var i = 0; i < 5; i ++) {
-//            model.incRuntime();
-//        }
-//        assertEquals(rt + 5, model.getRuntime());
-//        assertEquals(lt, model.getLaptime());
-//        model.setLaptime();
-//        assertEquals(rt + 5, model.getLaptime());
-//        for (var i = 0; i < 5; i ++) {
-//            model.incRuntime();
-//        }
-//        assertEquals(rt + 10, model.getRuntime());
-//        assertEquals(rt + 5, model.getLaptime());
-//    }
 }

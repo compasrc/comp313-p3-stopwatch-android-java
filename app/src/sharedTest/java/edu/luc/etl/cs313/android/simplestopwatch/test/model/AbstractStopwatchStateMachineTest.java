@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+import android.view.OrientationEventListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public abstract class AbstractStopwatchStateMachineTest {
      * Setter for dependency injection. Usually invoked by concrete testcase
      * subclass.
      *
-     * @param model
+     * @param model The model used for dependency injection.
      */
     protected void setModel(final StopwatchStateMachine model) {
         this.model = model;
@@ -114,6 +115,29 @@ public abstract class AbstractStopwatchStateMachineTest {
         assertEquals(R.string.STOPPED, dependency.getState());
     }
 
+    /**
+     * 1. Timer is set to 7.
+     * 2. Waits 3 seconds.
+     * 3. Confirms timer is still at 7.
+     * 4. Waits 2 more seconds.
+     * 5. Confirms timer is now at 5.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testDecrementStartAtValue() {
+        assertEquals(R.string.STOPPED, dependency.getState());
+        for(int i = 0; i <= 7; i++) {
+            model.onButton();
+        }
+        assertEquals(R.string.INCREMENTING, dependency.getState());
+        assertTimeEquals(7);
+        onTickRepeat(4);
+        assertEquals(R.string.RUNNING, dependency.getState());
+        assertTimeEquals(7);
+        onTickRepeat(2);
+        assertTimeEquals(5);
+    }
 
     /**
      * Sends the given number of tick events to the model.
@@ -205,3 +229,4 @@ class UnifiedMockDependency implements TimeModel, ClockModel, StopwatchModelList
         return runningTime;
     }
 }
+

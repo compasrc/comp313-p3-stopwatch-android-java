@@ -1,12 +1,14 @@
 package edu.luc.etl.cs313.android.simplestopwatch.android;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 import android.content.Context;
@@ -19,6 +21,7 @@ import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 import edu.luc.etl.cs313.android.simplestopwatch.common.StopwatchModelListener;
 import edu.luc.etl.cs313.android.simplestopwatch.model.ConcreteStopwatchModelFacade;
 import edu.luc.etl.cs313.android.simplestopwatch.model.StopwatchModelFacade;
+
 
 /**
  * A thin adapter component for the stopwatch.
@@ -57,6 +60,27 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
         this.setModel(new ConcreteStopwatchModelFacade());
         // inject dependency on this into model to register for UI updates
         model.setModelListener(this);
+
+        OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                int epsilon = 10;
+                int leftLandscape = 90;
+                int rightLandscape = 270;
+
+                if(epsilonCheck(orientation, leftLandscape, epsilon) || epsilonCheck(orientation, rightLandscape, epsilon)) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                }
+            }
+            private boolean epsilonCheck(int orientation, int landscapeMode, int epsilon) {
+                return orientation > landscapeMode - epsilon && orientation < landscapeMode + epsilon;
+            }
+        };
+        orientationEventListener.enable();
+    }
+
+    public void changeOrientation(int orientation) {
+        setRequestedOrientation(orientation);
     }
 
     /**
@@ -121,7 +145,10 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
 
         try {
             player.setDataSource(context, defaultSoundUri);
-            player.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
+            player.setAudioAttributes(new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
             player.prepare();
             player.setOnCompletionListener(MediaPlayer::release);
             player.start();

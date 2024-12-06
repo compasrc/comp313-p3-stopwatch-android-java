@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowMediaPlayer;
 
 /**
  * Concrete Robolectric test subclass. For the Gradle unitTest task to work,
@@ -36,5 +37,6 @@ public class StopwatchActivityRobolectric extends AbstractStopwatchActivityTest 
     protected void runUiThreadTasks() {
         // Robolectric requires us to run the scheduled tasks explicitly!
         org.robolectric.shadows.ShadowLooper.runUiThreadTasks();
+        org.robolectric.shadows.ShadowMediaPlayer.setMediaInfoProvider(dataSource -> new ShadowMediaPlayer.MediaInfo(1, 0));
     }
 }
