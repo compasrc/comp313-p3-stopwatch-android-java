@@ -52,6 +52,7 @@ class IncrementingState implements StopwatchState {
     public void onTick() {
         ticker--;
         if (ticker == 0) {
+            ticker = Constants.TICK_WAIT;
             sm.actionAlarm();
             sm.toRunningState();
         } else {
