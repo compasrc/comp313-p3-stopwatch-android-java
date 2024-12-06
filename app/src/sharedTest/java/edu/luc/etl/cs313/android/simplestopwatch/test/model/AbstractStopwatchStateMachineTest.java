@@ -67,13 +67,51 @@ public abstract class AbstractStopwatchStateMachineTest {
         assertEquals(R.string.STOPPED, dependency.getState());
     }
 
+    /**
+     * Verifies that when runtime reaches 99 in the incrementing state,
+     * the state machine transitions into the running state,
+     * and then after 5 ticks the runtime is 94.
+     *
+     * @author Emil and Ryan
+     * */
     @Test
     public void testDecrementStartAt99() {
+        assertEquals(R.string.STOPPED, dependency.getState());
         for (int i = 0; i < 99; i++) {
             model.onButton();
         }
+        assertEquals(R.string.RUNNING, dependency.getState());
         onTickRepeat(5);
         assertTimeEquals(94);
+    }
+
+    /**
+     * Verifies the following:
+     * 1. The state machine starts in the stopped state.
+     * 2. Upon pressing the button, the state machine transitions to the incrementing state and increments runtime by 1.
+     * 3. After 5 ticks have passed (3 seconds + 1 second to allow runtime to decrement), the state is alarming.
+     * 4. When in the alarming state, after the button is pressed the runtime is set back to 0 and the state machine is in the stopped state.
+     * 5. After pressing the button, ensures the same tests in steps 2-4 pass in the second cycle of the state machine.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testEdgeCaseOne() {
+        assertEquals(R.string.STOPPED, dependency.getState());
+        model.onButton();
+        assertEquals(R.string.INCREMENTING, dependency.getState());
+        assertTimeEquals(1);
+        onTickRepeat(5);
+        assertEquals(R.string.ALARMING, dependency.getState());
+        model.onButton();
+        assertEquals(R.string.STOPPED, dependency.getState());
+        assertTimeEquals(0);
+        model.onButton();
+        assertTimeEquals(1);
+        onTickRepeat(5);
+        assertEquals(R.string.ALARMING, dependency.getState());
+        model.onButton();
+        assertEquals(R.string.STOPPED, dependency.getState());
     }
 
 
