@@ -127,16 +127,32 @@ public abstract class AbstractStopwatchStateMachineTest {
     @Test
     public void testDecrementStartAtValue() {
         assertEquals(R.string.STOPPED, dependency.getState());
-        for(int i = 0; i <= 7; i++) {
+        for(int i = 0; i < 7; i++) {
             model.onButton();
+            System.out.println(model.getRuntime());
         }
         assertEquals(R.string.INCREMENTING, dependency.getState());
         assertTimeEquals(7);
-        onTickRepeat(4);
+        onTickRepeat(3);
         assertEquals(R.string.RUNNING, dependency.getState());
         assertTimeEquals(7);
         onTickRepeat(2);
         assertTimeEquals(5);
+    }
+
+    /**
+     * Verifies time starts at 0 and when button is pressed 7 times, runtime is 7.
+     *
+     * @author Ryan and Emil
+     * */
+    @Test
+    public void testActivityScenarioInc() {
+        assertEquals(R.string.STOPPED, dependency.getState());
+        assertTimeEquals(0);
+        for(int i = 0; i < 7; i++) {
+            model.onButton();
+        }
+        assertTimeEquals(7);
     }
 
     /**

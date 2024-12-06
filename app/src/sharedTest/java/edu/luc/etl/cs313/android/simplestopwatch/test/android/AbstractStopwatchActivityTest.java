@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 import org.junit.Ignore;
@@ -54,22 +55,21 @@ public abstract class AbstractStopwatchActivityTest {
     public void testActivityScenarioRun() throws Throwable {
         getActivity().runOnUiThread(() -> {
             assertEquals(0, getDisplayedValue());
-            for (int i = 0; i < 5; i++) {
+            for(int i = 0; i < 5; i++) {
                 assertTrue(getStartStopButton().performClick());
-                runUiThreadTasks();
             }
+        });
+        runUiThreadTasks();
+        Thread.sleep(3000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
             assertEquals(5, getDisplayedValue());
         });
-        Thread.sleep(3000); // <-- do not run this in the UI thread!
         runUiThreadTasks();
-        assertEquals(5, getDisplayedValue());
-        Thread.sleep(4000);
+        Thread.sleep(5500);
         runUiThreadTasks();
-        Thread.sleep(1000);
-        runUiThreadTasks(); // need to run twice otherwise the code halts when the alarm sounds
         getActivity().runOnUiThread(() -> {
             assertEquals(0, getDisplayedValue());
-            assertTrue(getStartStopButton().performClick());
         });
     }
 
@@ -82,16 +82,20 @@ public abstract class AbstractStopwatchActivityTest {
      * */
     @Test
     public void testDecrementStartAt99() throws Throwable {
-        assertEquals(0, getDisplayedValue());
-        for (int i = 0; i < 99; i++) {
-            assertTrue(getStartStopButton().performClick());
-            runUiThreadTasks();
-        }
-        assertEquals(Constants.SEC_MAX, getDisplayedValue());
+        getActivity().runOnUiThread(() -> {
+            assertEquals(0, getDisplayedValue());
+            for(int i = 0; i < 99; i++) {
+                assertTrue(getStartStopButton().performClick());
+                runUiThreadTasks();
+            }
+            assertEquals(Constants.SEC_MAX, getDisplayedValue());
+        });
+        runUiThreadTasks();
         Thread.sleep(5000);
         runUiThreadTasks();
-        assertEquals(94, getDisplayedValue());
-        assertTrue(getStartStopButton().performClick());
+        getActivity().runOnUiThread(() -> {
+            assertEquals(94, getDisplayedValue());
+        });
     }
 
     /**
@@ -102,20 +106,22 @@ public abstract class AbstractStopwatchActivityTest {
     @Test
     public void testRuntimeOut() throws Throwable {
         getActivity().runOnUiThread(() -> {
-           for(int i = 0; i < 3; i++) {
-               assertTrue(getStartStopButton().performClick());
-           }
-           assertEquals(3, getDisplayedValue());
+            for(int i = 0; i < 3; i++) {
+                assertTrue(getStartStopButton().performClick());
+            }
+            assertEquals(3, getDisplayedValue());
         });
+        runUiThreadTasks();
         Thread.sleep(3000);
         runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
             assertEquals(3, getDisplayedValue());
         });
-        Thread.sleep(1000);
+        runUiThreadTasks();
+        Thread.sleep(5000);
         runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
-            assertEquals(2, getDisplayedValue());
+            assertEquals(0, getDisplayedValue());
         });
     }
 
@@ -127,23 +133,90 @@ public abstract class AbstractStopwatchActivityTest {
     @Test
     public void testDecrementAfterRotation() throws Throwable {
         getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
             for(int i = 0; i < 7; i++) {
                 assertTrue(getStartStopButton().performClick());
             }
             assertEquals(7, getDisplayedValue());
         });
-        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        runUiThreadTasks();
         Thread.sleep(3000);
+        runUiThreadTasks();
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
             assertEquals(7, getDisplayedValue());
         });
-        Thread.sleep(1000);
+        runUiThreadTasks();
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        runUiThreadTasks();
+        Thread.sleep(9000);
         runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
-            assertEquals(6, getDisplayedValue());
+            assertEquals(0, getDisplayedValue());
         });
+    }
+
+    /**
+     * Checks the following functionality:
+     * 1. Stopwatch goes up to 99 and begins counting down.
+     * 2. Stopwatch begins counting down once 99 is reached.
+     * 3. Clicking the stopwatch while it is counting down stops the stopwatch.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testActivityScenarioIncUntilFull() throws Throwable {
+        getActivity().runOnUiThread(() -> {
+            for(int i = 0; i < 99; i++) {
+                assertTrue(getStartStopButton().performClick());
+                runUiThreadTasks();
+            }
+            assertEquals(Constants.SEC_MAX, getDisplayedValue());
+        });
+
+        Thread.sleep(2000);
+        runUiThreadTasks();
+
+        getActivity().runOnUiThread(() -> {
+           assertEquals(Constants.SEC_MAX - 2, getDisplayedValue());
+           assertTrue(getStartStopButton().performClick());
+           assertEquals(0, getDisplayedValue());
+        });
+    }
+
+    /**
+     * Once time is incremented to 99, verifies that time is conserved after device is rotated.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testRotationAt99() throws Throwable {
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(0, getDisplayedValue());
+            for(int i = 0; i < 99; i++) {
+                assertTrue(getStartStopButton().performClick());
+                runUiThreadTasks();
+            }
+            assertEquals(Constants.SEC_MAX, getDisplayedValue());
+        });
+        runUiThreadTasks();
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> assertEquals(Constants.SEC_MAX, getDisplayedValue()));
+    }
+
+    /**
+     * Increments time by some amount, rotates device, waits three seconds, and checks that timer is still decrementing correctly.
+     *
+     * @author Emil and Ryan
+     * */
+    @Test
+    public void testIncAfterRotation() throws Throwable {
+
     }
 
     // auxiliary methods for easy access to UI widgets
@@ -168,4 +241,5 @@ public abstract class AbstractStopwatchActivityTest {
      * by the testing framework, e.g., Robolectric.
      */
     protected void runUiThreadTasks() { }
+
 }
