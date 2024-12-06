@@ -32,14 +32,6 @@ public abstract class AbstractTimeModelTest {
     }
 
     /**
-     * Verifies that runtime and laptime are initially 0 or less.
-     */
-    @Test
-    public void testPreconditions() {
-        assertEquals(0, model.getRuntime());
-    }
-
-    /**
      * Verifies that initial state runtime is zero.
      *
      * @author Chris & Michael

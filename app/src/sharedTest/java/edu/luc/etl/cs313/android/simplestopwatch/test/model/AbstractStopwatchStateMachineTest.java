@@ -86,6 +86,81 @@ public abstract class AbstractStopwatchStateMachineTest {
         assertTimeEquals(94);
     }
 
+
+    /**
+     * Verifies that when timer reaches 0 during Running state,
+     * the state machine transitions to Alarming.
+     *
+     * @author Chris & Michael
+     */
+    @Test
+    public void testRunningToAlarming() {
+
+        model.onButton();
+        onTickRepeat(3);    // enter Running
+        onTickRepeat(2);    // enter Alarming
+        assertEquals(R.string.ALARMING, dependency.getState());
+    }
+
+    /**
+     * Verifies that timer stops when Alarming.
+     *
+     * @author Chris & Michael
+     */
+    @Test
+    public void testTimerInAlarming() {
+
+        model.onButton();
+        onTickRepeat(3);    // enter Running
+        onTickRepeat(2);    // enter Alarming
+        assertTimeEquals(0);
+        onTickRepeat(5);
+        assertTimeEquals(0);
+        onTickRepeat(99);
+        assertTimeEquals(0);
+    }
+
+    /**
+     * Verifies that when button is pressed during Alarming,
+     * state machine transitions to Stopped.
+     *
+     * @author Chris & Michael
+     */
+    @Test
+    public void testAlarmingToStopped() {
+
+        model.onButton();
+        onTickRepeat(3);    // enter Running
+        onTickRepeat(2);    // enter Alarming
+        model.onButton();
+        assertEquals(R.string.STOPPED, dependency.getState());
+    }
+
+    /**
+     * Verifies that when button is pressed during Running,
+     * state machine transitions to Stopped.
+     *
+     * @author Chris & Michael
+     */
+    @Test
+    public void testRunningToStopped() {
+
+        for (int i=0; i<5; i++){
+            model.onButton();
+        }
+        onTickRepeat(3);    //enter Running
+        model.onButton();
+        assertTimeEquals(0);
+        assertEquals(R.string.STOPPED, dependency.getState());
+
+        for (int i=0; i<99; i++){
+            model.onButton();
+        }
+        model.onButton();
+        assertTimeEquals(0);
+        assertEquals(R.string.STOPPED, dependency.getState());
+    }
+
     /**
      * Verifies the following:
      * 1. The state machine starts in the stopped state.
