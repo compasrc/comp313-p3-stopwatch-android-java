@@ -216,7 +216,26 @@ public abstract class AbstractStopwatchActivityTest {
      * */
     @Test
     public void testIncAfterRotation() throws Throwable {
-
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> {
+            assertEquals(0, getDisplayedValue());
+            for(int i = 0; i < 14; i++) {
+                assertTrue(getStartStopButton().performClick());
+                runUiThreadTasks();
+            }
+            assertEquals(14, getDisplayedValue());
+        });
+        runUiThreadTasks();
+        getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        runUiThreadTasks();
+        Thread.sleep(3000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> assertEquals(14, getDisplayedValue()));
+        runUiThreadTasks();
+        Thread.sleep(2000);
+        runUiThreadTasks();
+        getActivity().runOnUiThread(() -> assertTrue(getDisplayedValue() < 14));
     }
 
     // auxiliary methods for easy access to UI widgets
