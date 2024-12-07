@@ -142,10 +142,14 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
      * @param notification_sound The sound to use for the notification (from RingtoneManager).
      */
     public void soundAlarm(final int notification_sound) {
+        final Uri sound = RingtoneManager.getDefaultUri(notification_sound);
+        final MediaPlayer mediaplayer = new MediaPlayer();
+        final Context context = getApplicationContext();
         try {
-            Uri notification = RingtoneManager.getDefaultUri(notification_sound);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
+            mediaplayer.setDataSource(context, sound);
+            mediaplayer.prepare();
+            mediaplayer.setOnCompletionListener(MediaPlayer::release);
+            mediaplayer.start();
         } catch(final Exception e) {
             throw new RuntimeException(e);
         }
