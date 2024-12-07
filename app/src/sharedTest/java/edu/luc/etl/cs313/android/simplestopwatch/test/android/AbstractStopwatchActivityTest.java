@@ -15,6 +15,7 @@ import android.widget.TextView;
 import edu.luc.etl.cs313.android.simplestopwatch.R;
 import edu.luc.etl.cs313.android.simplestopwatch.android.StopwatchAdapter;
 import org.robolectric.shadows.ShadowMediaPlayer;
+import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 
 import static edu.luc.etl.cs313.android.simplestopwatch.common.Constants.SEC_PER_MIN;
 
@@ -151,7 +152,7 @@ public abstract class AbstractStopwatchActivityTest {
         runUiThreadTasks();
         getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         runUiThreadTasks();
-        Thread.sleep(9000);
+        Thread.sleep(8000);
         runUiThreadTasks();
         getActivity().runOnUiThread(() -> {
             assertEquals(0, getDisplayedValue());

@@ -1,9 +1,11 @@
 package edu.luc.etl.cs313.android.simplestopwatch.android;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.pm.ActivityInfo;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -153,20 +155,15 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
      * @param notification_sound The sound to use for the notification (from RingtoneManager).
      */
     public void soundAlarm(final int notification_sound) {
-        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(notification_sound);
-        final MediaPlayer player = new MediaPlayer();
+        final Uri sound = RingtoneManager.getDefaultUri(notification_sound);
+        final MediaPlayer mediaplayer = new MediaPlayer();
         final Context context = getApplicationContext();
-
         try {
-            player.setDataSource(context, defaultSoundUri);
-            player.setAudioAttributes(new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build());
-            player.prepare();
-            player.setOnCompletionListener(MediaPlayer::release);
-            player.start();
-        } catch(final IOException e) {
+            mediaplayer.setDataSource(context, sound);
+            mediaplayer.prepare();
+            mediaplayer.setOnCompletionListener(MediaPlayer::release);
+            mediaplayer.start();
+        } catch(final Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -189,9 +186,7 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
         String stringNum = ((EditText)findViewById(R.id.userTime)).getText().toString();
         if (!stringNum.isEmpty()) {
             int intNum = Integer.parseInt(stringNum);
-            if (intNum > Constants.SEC_MAX) {
-                intNum = Constants.SEC_MAX;
-            }
+            if (intNum > Constants.SEC_MAX) { intNum = Constants.SEC_MAX; }
             return intNum;
         } else {
             return Constants.UI_DEFAULT;
