@@ -331,7 +331,7 @@ class UnifiedMockDependency implements TimeModel, ClockModel, StopwatchModelList
 
     @Override
     public int getUserRuntime() {
-        return 0;
+        return Constants.UI_DEFAULT;
     }
 
 }
