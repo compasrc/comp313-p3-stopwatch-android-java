@@ -121,7 +121,7 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
     }
 
     /**
-     * Updates the state name in the UI.
+     * Updates the state name in the UI and hides the input field when not Stopped.
      *
      * @param stateId The state name to update in the UI.
      */
@@ -130,6 +130,19 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
         runOnUiThread(() -> {
             final TextView stateName = findViewById(R.id.stateName);
             stateName.setText(getString(stateId));
+
+            final EditText userTime = findViewById(R.id.userTime);
+            final TextView text = findViewById(R.id.text);
+
+            if (stateId == R.string.RUNNING || stateId == R.string.ALARMING || stateId == R.string.INCREMENTING) {
+                userTime.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
+            }
+
+            if (stateId == R.string.STOPPED) {
+                userTime.setVisibility(View.VISIBLE);
+                text.setVisibility(View.VISIBLE);
+            }
         });
     }
 

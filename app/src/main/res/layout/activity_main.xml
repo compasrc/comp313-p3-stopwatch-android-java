@@ -69,6 +69,7 @@
                 tools:visibility="visible"
                 android:hint="Input Time"
                 android:textAlignment="center"
+                android:visibility="visible"
         />
     </RelativeLayout>
     <RelativeLayout
@@ -88,6 +89,7 @@
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/textbox"
+            android:visibility="visible"
     />
 
 
