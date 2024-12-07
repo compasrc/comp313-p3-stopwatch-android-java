@@ -136,14 +136,13 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
             final EditText userTime = findViewById(R.id.userTime);
             final TextView text = findViewById(R.id.text);
 
-            if (stateId != R.string.STOPPED) {
-                userTime.setVisibility(View.GONE);
-                text.setVisibility(View.GONE);
-            }
-
             if (stateId == R.string.STOPPED) {
                 userTime.setVisibility(View.VISIBLE);
                 text.setVisibility(View.VISIBLE);
+            }
+            else {
+                userTime.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             }
         });
     }
