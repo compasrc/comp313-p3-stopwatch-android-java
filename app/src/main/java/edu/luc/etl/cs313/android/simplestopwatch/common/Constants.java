@@ -38,4 +38,9 @@ public enum Constants {
      * Constant defined as the default sound to use for the alarm.
      * */
     public static final int DEFAULT_ALARM = RingtoneManager.TYPE_NOTIFICATION;
+
+    /**
+     * Constant defined to watch for changes due to user entered time.
+     * */
+    public static final int UI_DEFAULT = Integer.MIN_VALUE;
 }

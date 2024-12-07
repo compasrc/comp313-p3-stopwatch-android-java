@@ -110,4 +110,13 @@ public class DefaultStopwatchStateMachine implements StopwatchStateMachine {
     @Override public void actionAlarm() { listener.soundAlarm(Constants.DEFAULT_ALARM); }
     @Override public void actionUpdateView() { state.updateView(); }
 
+    @Override
+    public int getEnteredTime() {
+        return listener.getUserRuntime();
+    }
+
+    @Override
+    public void enterTime(int runtime) {
+        timeModel.setRuntime(runtime);
+    }
 }

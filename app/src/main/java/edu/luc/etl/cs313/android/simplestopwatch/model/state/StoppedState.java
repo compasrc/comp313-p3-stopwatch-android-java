@@ -1,6 +1,7 @@
 package edu.luc.etl.cs313.android.simplestopwatch.model.state;
 
 import edu.luc.etl.cs313.android.simplestopwatch.R;
+import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 
 /**
  * Class definition for the StoppedState class (state design pattern)
@@ -29,9 +30,18 @@ class StoppedState implements StopwatchState {
      */
     @Override
     public void onButton() {
-        sm.actionInc();
-        sm.actionStart();
-        sm.toIncrementingState();
+        int enteredTime = sm.getEnteredTime();
+        if (enteredTime == Constants.UI_DEFAULT) {
+            sm.actionInc();
+            sm.actionStart();
+            sm.toIncrementingState();
+        } else {
+            sm.enterTime(enteredTime);
+            updateView();
+            sm.actionAlarm();
+            sm.toRunningState();
+            sm.actionStart();
+        }
     }
 
     /**

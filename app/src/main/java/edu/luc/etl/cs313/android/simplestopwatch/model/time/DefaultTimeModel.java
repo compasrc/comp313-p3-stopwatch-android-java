@@ -29,4 +29,8 @@ public class DefaultTimeModel implements TimeModel {
         return runningTime;
     }
 
+    @Override
+    public void setRuntime(int runtime) {
+        runningTime = runtime;
+    }
 }

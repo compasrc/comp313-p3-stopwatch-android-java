@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import android.view.OrientationEventListener;
+import android.widget.EditText;
+import edu.luc.etl.cs313.android.simplestopwatch.common.Constants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -319,5 +321,14 @@ class UnifiedMockDependency implements TimeModel, ClockModel, StopwatchModelList
     public int getRuntime() {
         return runningTime;
     }
+
+    @Override
+    public void setRuntime(int runtime) { runningTime = runtime; }
+
+    @Override
+    public int getUserRuntime() {
+        return 0;
+    }
+
 }
 

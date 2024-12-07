@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.OrientationEventListener;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Context;
 
@@ -164,5 +165,23 @@ public class StopwatchAdapter extends Activity implements StopwatchModelListener
      */
     public void onButton(final View view) {
         model.onButton();
+    }
+
+    /**
+     * Using EditText object, obtains the user number for the UI.
+     * Still ensures that this new number is less than Constants.SEC_MAX.
+     * */
+    @Override
+    public int getUserRuntime() {
+        String stringNum = ((EditText)findViewById(R.id.userTime)).getText().toString();
+        if (!stringNum.isEmpty()) {
+            int intNum = Integer.parseInt(stringNum);
+            if (intNum > Constants.SEC_MAX) {
+                intNum = Constants.SEC_MAX;
+            }
+            return intNum;
+        } else {
+            return Constants.UI_DEFAULT;
+        }
     }
 }

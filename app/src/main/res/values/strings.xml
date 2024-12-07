@@ -6,7 +6,7 @@
     <string name="title_activity_main">Loyola CS 313/413 Stopwatch</string>
 
     <!-- view strings -->
-    <string name="startStop">Increment/Stop</string>
+    <string name="startStop">Increment/Stop/Enter Time</string>
     <string name="resetLap">Foo</string>
     <string name="minutes">00</string>
     <string name="seconds">00</string>
@@ -17,5 +17,5 @@
     <string name="RUNNING">Running</string>
     <string name="INCREMENTING">Incrementing</string>
     <string name="ALARMING">Alarming</string>
-
+    <string name="PARAGRAPH">Please either increment the time using the button above (to a max of 99) or enter a time and press the button to begin the timer.</string>
 </resources>

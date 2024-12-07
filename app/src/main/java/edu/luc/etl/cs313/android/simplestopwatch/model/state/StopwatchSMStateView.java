@@ -29,4 +29,6 @@ interface StopwatchSMStateView {
 
     // state-dependent UI updates
     void updateUIRuntime();
+    int getEnteredTime();
+    void enterTime(int time);
 }

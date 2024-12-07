@@ -54,5 +54,41 @@
             android:onClick="onButton"
             android:text="@string/startStop" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textbox"
+        android:layout_below="@id/buttons"
+        android:layout_centerHorizontal="true">
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/userTime"
+                tools:visibility="visible"
+                android:hint="Input Time"
+                android:textAlignment="center"
+        />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:id="@+id/paragraph"
+            android:layout_below="@id/paragraph"
+            android:layout_centerHorizontal="true">
+
+    </RelativeLayout>
+    <TextView
+            android:id="@+id/text"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/PARAGRAPH"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textbox"
+    />
+
 
 </RelativeLayout>
